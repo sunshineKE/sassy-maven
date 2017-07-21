@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import com.cathive.sass.SassCompilationException;
 import com.cathive.sass.SassContext;
 import com.cathive.sass.SassFileContext;
 
@@ -39,6 +40,10 @@ public class SassCompiler implements ISassCompiler {
 			System.out.println("Compiled to file " + outfile.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		catch (SassCompilationException e) {
+			throw new SassCompilerException(e.getStatus(), e.getMessage(), e.getFileName(), e.getLine(), e.getColumn(),
+					e.getJson());
 		}
 	}
 
