@@ -3,8 +3,9 @@ package org.jago.sassymaven.compiler;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 
-import org.jago.sassymaven.compiler.util.PathUtils;
+import org.jago.sassymaven.compiler.util.SassFileSystemUtils;
 
 import com.cathive.sass.SassCompilationException;
 import com.cathive.sass.SassContext;
@@ -19,7 +20,7 @@ public class SassCompiler implements ISassCompiler {
 
 	@Override
 	public void compile(String sourceDirectory, String destinationDirectory) {
-		File[] files = PathUtils.scanForSassFiles(sourceDirectory);
+		File[] files = SassFileSystemUtils.scanDirectoryForSassFiles(sourceDirectory);
 		
 		if (files != null) {
 			for (int i = 0; i < files.length; i++) {
@@ -32,30 +33,32 @@ public class SassCompiler implements ISassCompiler {
 		SassCompilerLogger.logInfo("------- Compilation finished -------");
 	}
 
+
 	private void compileSingleFile(File sourceFile, String destinationDirectory) {
 		SassContext ctx = SassFileContext.create(sourceFile.toPath());
 
-		String outfilePath = destinationDirectory + "/" + sourceFile.getName().replace(".scss", ".css");
-
-		File outfile = new File(outfilePath);
+		File outfile = SassFileSystemUtils.prepeareDestinationFile(destinationDirectory, sourceFile.getName());
+		FileOutputStream fos;
 
 		try {
 			SassCompilerLogger
-					.logInfo("Compiling file " + sourceFile.getAbsolutePath() +
-			 " ==> " + destinationDirectory);
-			
+					.logInfo("Compiling file " + sourceFile.getAbsolutePath() + " ==> " + destinationDirectory);
+
 			if (!outfile.exists()) {
 				outfile.createNewFile();
 			}
-			FileOutputStream fos = new FileOutputStream(outfile);
 
-			ctx.compile(fos);
+			fos = new FileOutputStream(outfile);
+
+			try {
+				ctx.compile(fos);
+			} catch (SassCompilationException e) {
+				e.printStackTrace(new PrintStream(outfile));
+				SassCompilerLogger.logException(new SassCompilerException(e.getStatus(), e.getMessage(),
+						e.getFileName(), e.getLine(), e.getColumn(), e.getJson()));
+			}
 		} catch (IOException e) {
 			SassCompilerLogger.logException(e);
-		} catch (SassCompilationException e) {
-			// TODO write stack trace to destination file
-			SassCompilerLogger.logException(new SassCompilerException(e.getStatus(), e.getMessage(), e.getFileName(),
-					e.getLine(), e.getColumn(), e.getJson()));
 		}
 	}
 
