@@ -3,8 +3,8 @@ package org.jago.sassymaven.compiler;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
+import org.jago.sassymaven.compiler.util.PathUtils;
 
 import com.cathive.sass.SassCompilationException;
 import com.cathive.sass.SassContext;
@@ -18,30 +18,39 @@ import com.cathive.sass.SassFileContext;
 public class SassCompiler implements ISassCompiler {
 
 	@Override
-	public void compile(String sourceDirectory, String destinationDirectory, String sourcefileName)
+	public void compile(String sourceDirectory, String destinationDirectory)
 			throws SassCompilerException {
-		Path srcRoot = Paths.get(sourceDirectory);
+		File[] files = PathUtils.scanForSassFiles(sourceDirectory);
+		
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				compileSingleFile(files[i], destinationDirectory);
+			}
+		} else {
+			System.out.println("No files detected for directory " + sourceDirectory);
+		}
+	}
 
-		SassContext ctx = SassFileContext.create(srcRoot.resolve(sourcefileName));
+	private void compileSingleFile(File sourceFile, String destinationDirectory) {
+		SassContext ctx = SassFileContext.create(sourceFile.toPath());
 
-		String outfilePath = destinationDirectory + "/" + sourcefileName.replace(".scss", ".css");
+		String outfilePath = destinationDirectory + "/" + sourceFile.getName().replace(".scss", ".css");
 
 		File outfile = new File(outfilePath);
 
 		try {
+			System.out.println("Compiling file " + sourceFile.getAbsolutePath() +
+			 " ==> " + destinationDirectory);
+			
 			if (!outfile.exists()) {
-				System.out.println("Creating file " + outfile.getAbsolutePath());
 				outfile.createNewFile();
 			}
 			FileOutputStream fos = new FileOutputStream(outfile);
 
 			ctx.compile(fos);
-			
-			System.out.println("Compiled to file " + outfile.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		catch (SassCompilationException e) {
+		} catch (SassCompilationException e) {
 			throw new SassCompilerException(e.getStatus(), e.getMessage(), e.getFileName(), e.getLine(), e.getColumn(),
 					e.getJson());
 		}

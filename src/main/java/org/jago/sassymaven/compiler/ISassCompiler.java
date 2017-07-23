@@ -16,5 +16,5 @@ public interface ISassCompiler {
 	 * @param destinationDirectory
 	 * @param sourcefileName
 	 */
-	public void compile(String sourceDirectory, String destinationDirectory, String sourcefileName);
+	public void compile(String sourceDirectory, String destinationDirectory);
 }

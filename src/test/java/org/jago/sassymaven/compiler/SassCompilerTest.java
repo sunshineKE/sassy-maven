@@ -9,27 +9,27 @@ public class SassCompilerTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
+	// TODO assertions for compiled files (check for existance)
+
 	@Test
 	public void testSassCompiler() {
 		SassCompiler compiler = new SassCompiler();
-		compiler.compile("src/test/resources", "src/test/resources", "sassTestfile.scss");
+		compiler.compile("src/test/resources/validFiles", "src/test/resources/validFiles");
 	}
 
 	@Test
-	public void testSassCompilerSyntaxError() {
+	public void testSassCompilerSyntaxErrorInOneFile() {
 		SassCompiler compiler = new SassCompiler();
 
 		thrown.expect(SassCompilerException.class);
 		
-		compiler.compile("src/test/resources", "src/test/resources", "sassTestfileFailure.scss");
+		compiler.compile("src/test/resources/invalidFiles", "src/test/resources/invalidFiles");
 	}
 
 	@Test
-	public void testSassCompilerFileNotFound() {
+	public void testSassCompilerPathNotFound() {
 		SassCompiler compiler = new SassCompiler();
 
-		thrown.expect(SassCompilerException.class);
-
-		compiler.compile("src/test/resources", "src/test/resources", "notexistingFile.scss");
+		compiler.compile("xy/zz", "ab/cc");
 	}
 }
