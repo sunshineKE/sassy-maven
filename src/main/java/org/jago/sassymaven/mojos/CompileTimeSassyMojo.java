@@ -1,14 +1,15 @@
 package org.jago.sassymaven.mojos;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
 
-public abstract class AbstractSassyMojo extends AbstractMojo {
+@Mojo(name = "update:stylesheets")
+public class CompileTimeSassyMojo extends AbstractSassyMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 
-		getLog().info("I've got my mojo working.");
+		super.execute();
 	}
 }
