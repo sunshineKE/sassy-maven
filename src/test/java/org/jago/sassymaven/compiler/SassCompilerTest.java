@@ -1,9 +1,13 @@
 package org.jago.sassymaven.compiler;
 
-import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class SassCompilerTest {
+
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
 	@Test
 	public void testSassCompiler() {
@@ -14,10 +18,18 @@ public class SassCompilerTest {
 	@Test
 	public void testSassCompilerSyntaxError() {
 		SassCompiler compiler = new SassCompiler();
-		try {
-			compiler.compile("src/test/resources", "src/test/resources", "sassTestfileFailure.scss");
-		} catch (SassCompilerException e) {
-			Assert.assertTrue(true);
-		}
+
+		thrown.expect(SassCompilerException.class);
+		
+		compiler.compile("src/test/resources", "src/test/resources", "sassTestfileFailure.scss");
+	}
+
+	@Test
+	public void testSassCompilerFileNotFound() {
+		SassCompiler compiler = new SassCompiler();
+
+		thrown.expect(SassCompilerException.class);
+
+		compiler.compile("src/test/resources", "src/test/resources", "notexistingFile.scss");
 	}
 }
