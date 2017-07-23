@@ -18,8 +18,7 @@ import com.cathive.sass.SassFileContext;
 public class SassCompiler implements ISassCompiler {
 
 	@Override
-	public void compile(String sourceDirectory, String destinationDirectory)
-			throws SassCompilerException {
+	public void compile(String sourceDirectory, String destinationDirectory) {
 		File[] files = PathUtils.scanForSassFiles(sourceDirectory);
 		
 		if (files != null) {
@@ -27,8 +26,10 @@ public class SassCompiler implements ISassCompiler {
 				compileSingleFile(files[i], destinationDirectory);
 			}
 		} else {
-			System.out.println("No files detected for directory " + sourceDirectory);
+			SassCompilerLogger.logInfo("No files found in directory " + sourceDirectory);
 		}
+		
+		SassCompilerLogger.logInfo("------- Compilation finished -------");
 	}
 
 	private void compileSingleFile(File sourceFile, String destinationDirectory) {
@@ -39,7 +40,8 @@ public class SassCompiler implements ISassCompiler {
 		File outfile = new File(outfilePath);
 
 		try {
-			System.out.println("Compiling file " + sourceFile.getAbsolutePath() +
+			SassCompilerLogger
+					.logInfo("Compiling file " + sourceFile.getAbsolutePath() +
 			 " ==> " + destinationDirectory);
 			
 			if (!outfile.exists()) {
@@ -49,10 +51,11 @@ public class SassCompiler implements ISassCompiler {
 
 			ctx.compile(fos);
 		} catch (IOException e) {
-			e.printStackTrace();
+			SassCompilerLogger.logException(e);
 		} catch (SassCompilationException e) {
-			throw new SassCompilerException(e.getStatus(), e.getMessage(), e.getFileName(), e.getLine(), e.getColumn(),
-					e.getJson());
+			// TODO write stack trace to destination file
+			SassCompilerLogger.logException(new SassCompilerException(e.getStatus(), e.getMessage(), e.getFileName(),
+					e.getLine(), e.getColumn(), e.getJson()));
 		}
 	}
 

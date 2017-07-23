@@ -34,4 +34,9 @@ public class SassCompilerException extends RuntimeException{
 		return delegate.getJson();
 	}
 
+	@Override
+	public String getMessage() {
+		return delegate.getMessage();
+	}
+
 }

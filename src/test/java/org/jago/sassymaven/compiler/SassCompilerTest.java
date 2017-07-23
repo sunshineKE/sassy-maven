@@ -21,8 +21,6 @@ public class SassCompilerTest {
 	public void testSassCompilerSyntaxErrorInOneFile() {
 		SassCompiler compiler = new SassCompiler();
 
-		thrown.expect(SassCompilerException.class);
-		
 		compiler.compile("src/test/resources/invalidFiles", "src/test/resources/invalidFiles");
 	}
 
