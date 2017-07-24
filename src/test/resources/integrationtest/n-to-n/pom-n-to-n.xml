@@ -23,10 +23,14 @@
 				<artifactId>sassy-maven-plugin</artifactId>
 				<configuration>
 					<directories>
-						<directorymapping>
-							<source>src/test/resources/integrationtest/1to1/input</source>
-							<destination>src/test/resources/integrationtest/1to1/output</destination>
-						</directorymapping>
+						<directoryMapping>
+							<source>src/test/resources/integrationtest/n-to-n/inpu1t</source>
+							<destination>src/test/resources/integrationtest/n-to-n/output2</destination>
+						</directoryMapping>
+						<directoryMapping>
+							<source>src/test/resources/integrationtest/n-to-n/input2</source>
+							<destination>src/test/resources/integrationtest/n-to-n/output2</destination>
+						</directoryMapping>
 					</directories>
 				</configuration>
 			</plugin>
