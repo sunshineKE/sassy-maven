@@ -3,8 +3,9 @@ package org.jago.sassymaven.compiler;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 
-import org.jago.sassymaven.compiler.util.PathUtils;
+import org.jago.sassymaven.compiler.util.SassFileSystemUtils;
 
 import com.cathive.sass.SassCompilationException;
 import com.cathive.sass.SassContext;
@@ -18,41 +19,46 @@ import com.cathive.sass.SassFileContext;
 public class SassCompiler implements ISassCompiler {
 
 	@Override
-	public void compile(String sourceDirectory, String destinationDirectory)
-			throws SassCompilerException {
-		File[] files = PathUtils.scanForSassFiles(sourceDirectory);
+	public void compile(String sourceDirectory, String destinationDirectory) {
+		File[] files = SassFileSystemUtils.findFileByExtension(sourceDirectory, "*.scss");
 		
 		if (files != null) {
 			for (int i = 0; i < files.length; i++) {
 				compileSingleFile(files[i], destinationDirectory);
 			}
 		} else {
-			System.out.println("No files detected for directory " + sourceDirectory);
+			SassCompilerLogger.logInfo("No files found in directory " + sourceDirectory);
 		}
+		
+		SassCompilerLogger.logInfo("------- Compilation finished -------");
 	}
+
 
 	private void compileSingleFile(File sourceFile, String destinationDirectory) {
 		SassContext ctx = SassFileContext.create(sourceFile.toPath());
 
-		String outfilePath = destinationDirectory + "/" + sourceFile.getName().replace(".scss", ".css");
-
-		File outfile = new File(outfilePath);
+		File outfile = SassFileSystemUtils.prepareDestinationFile(destinationDirectory, sourceFile.getName());
+		FileOutputStream fos;
 
 		try {
-			System.out.println("Compiling file " + sourceFile.getAbsolutePath() +
-			 " ==> " + destinationDirectory);
-			
+			SassCompilerLogger
+					.logInfo("Compiling file " + sourceFile.getAbsolutePath() + " ==> " + destinationDirectory);
+
 			if (!outfile.exists()) {
 				outfile.createNewFile();
 			}
-			FileOutputStream fos = new FileOutputStream(outfile);
 
-			ctx.compile(fos);
+			fos = new FileOutputStream(outfile);
+
+			try {
+				ctx.compile(fos);
+			} catch (SassCompilationException e) {
+				e.printStackTrace(new PrintStream(outfile));
+				SassCompilerLogger.logException(new SassCompilerException(e.getStatus(), e.getMessage(),
+						e.getFileName(), e.getLine(), e.getColumn(), e.getJson()));
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (SassCompilationException e) {
-			throw new SassCompilerException(e.getStatus(), e.getMessage(), e.getFileName(), e.getLine(), e.getColumn(),
-					e.getJson());
+			SassCompilerLogger.logException(e);
 		}
 	}
 
