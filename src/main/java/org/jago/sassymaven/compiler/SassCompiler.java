@@ -37,7 +37,7 @@ public class SassCompiler implements ISassCompiler {
 	private void compileSingleFile(File sourceFile, String destinationDirectory) {
 		SassContext ctx = SassFileContext.create(sourceFile.toPath());
 
-		File outfile = SassFileSystemUtils.prepeareDestinationFile(destinationDirectory, sourceFile.getName());
+		File outfile = SassFileSystemUtils.prepareDestinationFile(destinationDirectory, sourceFile.getName());
 		FileOutputStream fos;
 
 		try {

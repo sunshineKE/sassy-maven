@@ -19,7 +19,7 @@ public class SassFileSystemUtils {
 		return files;
 	}
 
-	public static File prepeareDestinationFile(String destinationDirectory, String sourceFileName) {
+	public static File prepareDestinationFile(String destinationDirectory, String sourceFileName) {
 		String outfilePath = destinationDirectory + "/" + sourceFileName.replace(".scss", ".css");
 		return new File(outfilePath);
 	}
