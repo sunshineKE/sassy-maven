@@ -24,8 +24,8 @@
 				<configuration>
 					<directories>
 						<directoryMapping>
-							<source>src/test/resources/integrationtest/1to1/input</source>
-							<destination>src/test/resources/integrationtest/1to1/output</destination>
+							<source>src/test/resources/integrationtest/1-to-1/input</source>
+							<destination>src/test/resources/integrationtest/1-to-1/output</destination>
 						</directoryMapping>
 					</directories>
 				</configuration>
