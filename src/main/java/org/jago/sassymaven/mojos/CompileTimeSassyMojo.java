@@ -11,5 +11,10 @@ public class CompileTimeSassyMojo extends AbstractSassyMojo {
 	public void execute() throws MojoExecutionException, MojoFailureException {
 
 		super.execute();
+
+		String sourceDirectory = directories.get("source");
+		String destinationDirectory = directories.get("dest");
+
+		compiler.compile(sourceDirectory, destinationDirectory);
 	}
 }

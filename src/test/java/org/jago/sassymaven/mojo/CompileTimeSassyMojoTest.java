@@ -34,11 +34,11 @@ public class CompileTimeSassyMojoTest /* extends AbstractMojoTestCase */ {
 			ctMojo.execute();
 		}
 		catch (MojoExecutionException e) {
-			;
+			Assert.assertNull(e);
 		} catch (MojoFailureException e) {
-			;
+			Assert.assertNull(e);
 		} catch (Exception e) {
-			;
+			Assert.assertNull(e);
 		}
 
 	}
