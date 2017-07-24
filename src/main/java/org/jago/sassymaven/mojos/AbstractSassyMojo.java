@@ -11,7 +11,7 @@ import org.jago.sassymaven.compiler.SassCompiler;
 
 public abstract class AbstractSassyMojo extends AbstractMojo {
 
-	ISassCompiler compiler = (ISassCompiler) new SassCompiler();
+	ISassCompiler compiler = new SassCompiler();
 
 	@Parameter
 	protected Map<String, String> directories;
