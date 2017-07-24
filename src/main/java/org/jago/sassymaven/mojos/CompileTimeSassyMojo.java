@@ -12,9 +12,8 @@ public class CompileTimeSassyMojo extends AbstractSassyMojo {
 
 		super.execute();
 
-		String sourceDirectory = directories.get("source");
-		String destinationDirectory = directories.get("dest");
-
-		compiler.compile(sourceDirectory, destinationDirectory);
+		for (DirectoryMapping d : directories) {
+			compiler.compile(d.getSource(), d.getDestination());
+		}
 	}
 }

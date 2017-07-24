@@ -23,8 +23,10 @@
 				<artifactId>sassy-maven-plugin</artifactId>
 				<configuration>
 					<directories>
-						<source>src/test/resources/validFiles</source>
-						<dest>src/test/resources/validFiles</dest>
+						<directorymapping>
+							<source>src/test/resources/integrationtest/1to1/input</source>
+							<destination>src/test/resources/integrationtest/1to1/output</destination>
+						</directorymapping>
 					</directories>
 				</configuration>
 			</plugin>

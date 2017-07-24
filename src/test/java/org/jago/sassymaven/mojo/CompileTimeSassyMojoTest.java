@@ -19,9 +19,9 @@ public class CompileTimeSassyMojoTest /* extends AbstractMojoTestCase */ {
 	public MojoRule rule = new MojoRule();
 
 	@Test
-	public void executeCompileTimeMojo() {
+	public void executeCompileTimeMojo1to1() {
 
-		File pom = new File("src/test/resources/validFiles/pom_1to1.xml");
+		File pom = new File("src/test/resources/integrationtest/1to1/pom_1to1.xml");
 		Assert.assertNotNull(pom);
 		Assert.assertTrue(pom.exists());
 
@@ -41,5 +41,8 @@ public class CompileTimeSassyMojoTest /* extends AbstractMojoTestCase */ {
 			Assert.assertNull(e);
 		}
 
+		File compiledFile = new File("src/test/resources/integrationtest/1to1/output/sassTestFile.css");
+
+		Assert.assertTrue(compiledFile.exists());
 	}
 }
