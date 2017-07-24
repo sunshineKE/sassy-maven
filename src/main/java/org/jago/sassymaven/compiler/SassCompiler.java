@@ -20,7 +20,7 @@ public class SassCompiler implements ISassCompiler {
 
 	@Override
 	public void compile(String sourceDirectory, String destinationDirectory) {
-		File[] files = SassFileSystemUtils.scanDirectoryForSassFiles(sourceDirectory);
+		File[] files = SassFileSystemUtils.findFileByExtension(sourceDirectory, "*.scss");
 		
 		if (files != null) {
 			for (int i = 0; i < files.length; i++) {
