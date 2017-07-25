@@ -1,6 +1,6 @@
 package org.jago.sassymaven.mojos;
 
-import java.util.Map;
+import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -11,10 +11,10 @@ import org.jago.sassymaven.compiler.SassCompiler;
 
 public abstract class AbstractSassyMojo extends AbstractMojo {
 
-	ISassCompiler compiler = (ISassCompiler) new SassCompiler();
+	ISassCompiler compiler = new SassCompiler();
 
 	@Parameter
-	protected Map<String, String> directories;
+	protected List<DirectoryMapping> directories;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
