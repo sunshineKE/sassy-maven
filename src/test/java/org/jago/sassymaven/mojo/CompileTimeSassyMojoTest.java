@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 
 
 
@@ -33,7 +34,7 @@ class TestParameter {
 
 
 @RunWith(Parameterized.class)
-public class CompileTimeSassyMojoTest /* extends AbstractMojoTestCase */ {
+public class CompileTimeSassyMojoTest {
 
 	@Parameter
 	public TestParameter params;
@@ -53,7 +54,7 @@ public class CompileTimeSassyMojoTest /* extends AbstractMojoTestCase */ {
 		;
 	}
 
-	@Parameterized.Parameters
+	@Parameters
 	public static Collection<Object> data() {
 		return Arrays.asList( new Object[] {
 			new TestParameter(
