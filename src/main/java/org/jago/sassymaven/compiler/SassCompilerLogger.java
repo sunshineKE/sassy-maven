@@ -2,21 +2,24 @@ package org.jago.sassymaven.compiler;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.maven.plugin.logging.Log;
 
 public class SassCompilerLogger {
-	public static Logger logger = LogManager.getRootLogger();
+	private Log logger;
 
-	public static void logException(SassCompilerException e) {
+	public SassCompilerLogger(Log logger) {
+		this.logger = logger;
+	}
+
+	public void logException(SassCompilerException e) {
 		logger.error(SassCompilerException.class.getName() + " " + e.getMessage());
 	}
 
-	public static void logException(IOException e) {
+	public void logException(IOException e) {
 		logger.error("" + " " + e);
 	}
 
-	public static void logInfo(String infoText) {
+	public void logInfo(String infoText) {
 		logger.info(infoText);
 	}
 }

@@ -15,5 +15,7 @@ public class CompileTimeSassyMojo extends AbstractSassyMojo {
 		for (DirectoryMapping d : directories) {
 			compiler.compile(d.getSource(), d.getDestination());
 		}
+
+		getLog().info("test");
 	}
 }

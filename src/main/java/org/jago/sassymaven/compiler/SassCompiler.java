@@ -18,6 +18,12 @@ import com.cathive.sass.SassFileContext;
  */
 public class SassCompiler implements ISassCompiler {
 
+	private SassCompilerLogger compilerLogger;
+
+	public SassCompiler(SassCompilerLogger logger) {
+		this.compilerLogger = logger;
+	}
+
 	@Override
 	public void compile(String sourceDirectory, String destinationDirectory) {
 		File[] files = SassFileSystemUtils.findFileByExtension(sourceDirectory, "*.scss");
@@ -27,10 +33,10 @@ public class SassCompiler implements ISassCompiler {
 				compileSingleFile(files[i], destinationDirectory);
 			}
 		} else {
-			SassCompilerLogger.logInfo("No files found in directory " + sourceDirectory);
+			compilerLogger.logInfo("No files found in directory " + sourceDirectory);
 		}
 		
-		SassCompilerLogger.logInfo("------- Compilation finished -------");
+		compilerLogger.logInfo("------- Compilation finished -------");
 	}
 
 
@@ -41,7 +47,7 @@ public class SassCompiler implements ISassCompiler {
 		FileOutputStream fos;
 
 		try {
-			SassCompilerLogger
+			compilerLogger
 					.logInfo("Compiling file " + sourceFile.getAbsolutePath() + " ==> " + destinationDirectory);
 
 			if (!outfile.exists()) {
@@ -54,11 +60,11 @@ public class SassCompiler implements ISassCompiler {
 				ctx.compile(fos);
 			} catch (SassCompilationException e) {
 				e.printStackTrace(new PrintStream(outfile));
-				SassCompilerLogger.logException(new SassCompilerException(e.getStatus(), e.getMessage(),
+				compilerLogger.logException(new SassCompilerException(e.getStatus(), e.getMessage(),
 						e.getFileName(), e.getLine(), e.getColumn(), e.getJson()));
 			}
 		} catch (IOException e) {
-			SassCompilerLogger.logException(e);
+			compilerLogger.logException(e);
 		}
 	}
 
