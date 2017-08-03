@@ -5,7 +5,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 
 @Mojo(name = "update")
-public class CompileTimeSassyMojo extends AbstractSassyMojo {
+public class CompileSassyMojo extends AbstractSassyMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {

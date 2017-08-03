@@ -22,6 +22,6 @@ public abstract class AbstractSassyMojo extends AbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		;
+		getLog();
 	}
 }

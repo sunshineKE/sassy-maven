@@ -8,7 +8,7 @@ import java.util.List;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.testing.MojoRule;
-import org.jago.sassymaven.mojos.CompileTimeSassyMojo;
+import org.jago.sassymaven.mojos.CompileSassyMojo;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,12 +21,12 @@ import org.junit.runners.Parameterized.Parameters;
 
 
 
-class TestParameter {
+class CompileSassyMojoTestParameter {
 	
 	public String pom;
 	public List<String> compiledFiles;
 	
-	public TestParameter(String pom, List<String> compiledFiles) {
+	public CompileSassyMojoTestParameter(String pom, List<String> compiledFiles) {
 		this.pom = pom;
 		this.compiledFiles = compiledFiles;
 	}
@@ -34,10 +34,10 @@ class TestParameter {
 
 
 @RunWith(Parameterized.class)
-public class CompileTimeSassyMojoTest {
+public class CompileSassyMojoTest {
 
 	@Parameter
-	public TestParameter params;
+	public CompileSassyMojoTestParameter params;
 	
 	@Rule
 	public MojoRule rule = new MojoRule();
@@ -57,13 +57,13 @@ public class CompileTimeSassyMojoTest {
 	@Parameters
 	public static Collection<Object> data() {
 		return Arrays.asList( new Object[] {
-			new TestParameter(
+			new CompileSassyMojoTestParameter(
 				"src/test/resources/integrationtest/1-to-1/pom-1-to-1.xml",
 				Arrays.asList( 
 					 "src/test/resources/integrationtest/1-to-1/output/sassTestFile.css" 
 					)
 				),
-			new TestParameter(
+			new CompileSassyMojoTestParameter(
 				"src/test/resources/integrationtest/n-to-n/pom-n-to-n.xml",
 				Arrays.asList( 
 					"src/test/resources/integrationtest/n-to-n/output1/sassTestFile.css",
@@ -75,8 +75,8 @@ public class CompileTimeSassyMojoTest {
 	}
 
 	private void runCompiler(File pom) throws MojoExecutionException, MojoFailureException, Exception {
-		CompileTimeSassyMojo ctMojo = new CompileTimeSassyMojo();
-		ctMojo = (CompileTimeSassyMojo) rule.configureMojo(ctMojo,
+		CompileSassyMojo ctMojo = new CompileSassyMojo();
+		ctMojo = (CompileSassyMojo) rule.configureMojo(ctMojo,
 				rule.extractPluginConfiguration("sassy-maven-plugin", pom));
 
 		ctMojo.execute();
@@ -91,12 +91,8 @@ public class CompileTimeSassyMojoTest {
 
 		try {
 			runCompiler(pom);
-		} catch (MojoExecutionException e) {
-			Assert.assertNull(e);
-		} catch (MojoFailureException e) {
-			Assert.assertNull(e);
 		} catch (Exception e) {
-			Assert.assertNull(e);
+			Assert.fail(e.getMessage());
 		}
 
 		
