@@ -50,7 +50,7 @@ public class WatchSassyMojo extends AbstractSassyMojo {
 					Path item = ev.context();
 					if (item != null && item.toString().endsWith(".scss")) {
 						Path sourceDir = (Path) key.watchable();
-						String destDir = sourceToDestDirectory.get(sourceDir.toString());
+						String destDir = sourceToDestDirectory.get(sourceDir.toString().replace('\\', '/'));
 						compiler.compile(sourceDir.toString(), destDir);
 					}
 				}
