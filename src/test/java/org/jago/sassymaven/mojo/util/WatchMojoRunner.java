@@ -1,6 +1,7 @@
 package org.jago.sassymaven.mojo.util;
 
 import java.io.File;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.maven.plugin.testing.MojoRule;
 import org.jago.sassymaven.mojos.WatchSassyMojo;
@@ -11,10 +12,12 @@ public class WatchMojoRunner extends Thread {
 	File pom;
 	MojoRule rule;
 	Exception ex;
+	CountDownLatch mojoStarted;
 
-	public WatchMojoRunner(File pom, MojoRule rule) {
+	public WatchMojoRunner(File pom, MojoRule rule, CountDownLatch mojoStarted) {
 		this.pom = pom;
 		this.rule = rule;
+		this.mojoStarted = mojoStarted;
 	}
 
 	@Override
@@ -23,6 +26,7 @@ public class WatchMojoRunner extends Thread {
 			watchMojo = new WatchSassyMojo();
 			watchMojo = (WatchSassyMojo) rule.configureMojo(watchMojo,
 					rule.extractPluginConfiguration("sassy-maven-plugin", pom));
+			mojoStarted.countDown();
 			watchMojo.execute();
 
 		} catch (Exception e) {
@@ -32,7 +36,6 @@ public class WatchMojoRunner extends Thread {
 
 	public void exit() throws InterruptedException {
 		watchMojo.stop();
-		Thread.currentThread().interrupt();
 		this.join();
 	}
 

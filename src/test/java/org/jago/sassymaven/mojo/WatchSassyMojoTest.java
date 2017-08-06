@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.maven.plugin.testing.MojoRule;
+import org.codehaus.plexus.util.FileUtils;
 import org.jago.sassymaven.mojo.util.Const;
 import org.jago.sassymaven.mojo.util.Const.FileChangeType;
 import org.jago.sassymaven.mojo.util.WatchMojoRunner;
@@ -28,6 +30,7 @@ import com.google.common.io.Files;
 public class WatchSassyMojoTest {
 	private ExecutorService execService = Executors.newCachedThreadPool();
 	private WatchMojoRunner mojoRunner;
+	private CountDownLatch mojoStarted;
 
 	@Parameter
 	public WatchSassyMojoTestParameter params;
@@ -38,7 +41,14 @@ public class WatchSassyMojoTest {
 	@Before
 	public void before() {
 		new File(params.getDestFilePath()).delete();
-		mojoRunner = new WatchMojoRunner(new File(params.getDestFilePath()), rule);
+		try {
+			FileUtils.cleanDirectory(params.getSrcBasePath());
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
+		mojoStarted = new CountDownLatch(1);
+		
+		mojoRunner = new WatchMojoRunner(new File(params.getPom()), rule, mojoStarted);		
 	}
 
 	@After
@@ -65,7 +75,6 @@ public class WatchSassyMojoTest {
 	}
 
 	@Test
-	// @Ignore("Not running, there's a threading problem.")
 	public void testWatchMojo() {
 
 		File pom = new File(params.getPom());
@@ -78,6 +87,7 @@ public class WatchSassyMojoTest {
 			switch (params.getFileAction()) {
 			case Created:
 				execService.execute(mojoRunner);
+				mojoStarted.await();
 				createSourceFileFromDestFile(params.getDestFilePath(), params.getSrcBasePath());
 				Thread.sleep(15000);
 				mojoRunner.throwExceptionIfAvailable();
@@ -88,7 +98,9 @@ public class WatchSassyMojoTest {
 			case Updated:
 				createSourceFileFromDestFile(params.getDestFilePath(), params.getSrcBasePath());
 				execService.execute(mojoRunner);
+				mojoStarted.await();
 				String sourceFilePath = getScssFileFromDestFile(params.getDestFilePath());
+				//TODO setting a new modification date seems not to trigger ENTRY_MODIFY
 				(new File(sourceFilePath)).setLastModified(System.currentTimeMillis());
 				Thread.sleep(15000);
 				mojoRunner.throwExceptionIfAvailable();
@@ -99,6 +111,7 @@ public class WatchSassyMojoTest {
 			case Deleted:
 				createSourceFileFromDestFile(params.getDestFilePath(), params.getSrcBasePath());
 				execService.execute(mojoRunner);
+				mojoStarted.await();
 				sourceFilePath = getScssFileFromDestFile(params.getDestFilePath());
 				(new File(sourceFilePath)).delete();
 				Thread.sleep(15000);
