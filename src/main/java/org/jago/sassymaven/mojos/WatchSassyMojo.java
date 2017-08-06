@@ -56,11 +56,13 @@ public class WatchSassyMojo extends AbstractSassyMojo {
 				}
 			}
 		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			getLog().error("Failure while watching directories." , e);
+		}
+		finally
+		{
+			Thread.currentThread().interrupt();			
 		}
 		
-		Thread.currentThread().interrupt();
 		return;
 	}
 	
