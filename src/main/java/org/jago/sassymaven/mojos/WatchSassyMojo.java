@@ -27,7 +27,6 @@ public class WatchSassyMojo extends AbstractSassyMojo {
 		HashMap<String, String> sourceToDestDirectory = new HashMap<String, String>();
 
 		super.execute();
-		// TODO Intitially run the CompileSassyMojo
 
 		try {
 
@@ -37,6 +36,7 @@ public class WatchSassyMojo extends AbstractSassyMojo {
 				Path sourcePath = Paths.get(d.getSource());
 				sourcePath.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
 				sourceToDestDirectory.put(d.getSource(), d.getDestination());
+				compiler.compile(d.getSource(), d.getDestination());
 			}
 
 			stopped = false;
