@@ -25,5 +25,13 @@ public class DirectoryMapping {
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
+	
+	public Boolean isRelativeDestination() {
+		return destination.startsWith("./") || destination.startsWith("../");
+	}
+	
+	public Boolean isScanningSource() {
+		return source.endsWith("/*");
+	}
 
 }
