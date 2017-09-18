@@ -36,7 +36,7 @@ public class WatchSassyMojo extends AbstractSassyMojo {
 			for (DirectoryMapping d : directories) {
 				Path sourcePath = Paths.get(d.getSource());
 				sourcePath.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
-				sourceToDestDirectory.put(d.getSource(), d.getDestination());
+				sourceToDestDirectory.put(sourcePath.toString(), d.getDestination());
 			}
 
 			stopped = false;
