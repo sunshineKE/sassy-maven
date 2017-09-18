@@ -36,8 +36,8 @@ public class WatchSassyMojo extends AbstractSassyMojo {
 			for (DirectoryMapping d : directories) {
 				Path sourcePath = Paths.get(d.getSource());
 				sourcePath.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
-				sourceToDestDirectory.put(sourcePath.toString(), d.getDestination());
-				compiler.compile(d.getSource(), d.getDestination());
+				sourceToDestDirectory.put(d.getSource().toString(), d.getDestination());
+				compiler.compile(d.getSource(), d.getDestination());		
 			}
 
 			stopped = false;
@@ -51,13 +51,18 @@ public class WatchSassyMojo extends AbstractSassyMojo {
 					Path item = ev.context();
 					if (item != null && item.toString().endsWith(".scss")) {
 						Path sourceDir = (Path) key.watchable();
-						String destDir = sourceToDestDirectory.get(sourceDir.toString().replace('\\', '/'));
+						String destDir = sourceToDestDirectory.get(sourceDir.toString().replace("\\", "/"));
 						compiler.compile(sourceDir.toString(), destDir);
 					}
 				}
+
+				key.reset();
 			}
 		} catch (IOException | InterruptedException e) {
 			getLog().error("Failure while watching directories." , e);
+		}
+		catch (Exception e) {
+			getLog().error("", e);
 		}
 		finally
 		{
