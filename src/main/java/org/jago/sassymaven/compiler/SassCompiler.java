@@ -30,7 +30,10 @@ public class SassCompiler implements ISassCompiler {
 		
 		if (files != null) {
 			for (int i = 0; i < files.length; i++) {
-				compileSingleFile(files[i], destinationDirectory);
+				// do not compile files which start with "_"
+				if (!files[i].getName().startsWith("_")) {
+					compileSingleFile(files[i], destinationDirectory);
+				}
 			}
 		} else {
 			compilerLogger.logInfo("No files found in directory " + sourceDirectory);
