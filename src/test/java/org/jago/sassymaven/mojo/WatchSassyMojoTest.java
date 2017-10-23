@@ -89,7 +89,7 @@ public class WatchSassyMojoTest {
 				execService.execute(mojoRunner);
 				mojoStarted.await();
 				createSourceFileFromDestFile(params.getDestFilePath(), params.getSrcBasePath());
-				Thread.sleep(15000);
+				Thread.sleep(1000);
 				mojoRunner.throwExceptionIfAvailable();
 
 				Assert.assertTrue(destFile.exists());
@@ -102,7 +102,7 @@ public class WatchSassyMojoTest {
 				String sourceFilePath = getScssFileFromDestFile(params.getDestFilePath());
 				//TODO setting a new modification date seems not to trigger ENTRY_MODIFY
 				(new File(sourceFilePath)).setLastModified(System.currentTimeMillis());
-				Thread.sleep(15000);
+				Thread.sleep(1000);
 				mojoRunner.throwExceptionIfAvailable();
 
 				Assert.assertTrue(destFile.exists());
@@ -114,7 +114,7 @@ public class WatchSassyMojoTest {
 				mojoStarted.await();
 				sourceFilePath = getScssFileFromDestFile(params.getDestFilePath());
 				(new File(sourceFilePath)).delete();
-				Thread.sleep(15000);
+				Thread.sleep(1000);
 				mojoRunner.throwExceptionIfAvailable();
 
 				Assert.assertTrue(destFile.exists());
