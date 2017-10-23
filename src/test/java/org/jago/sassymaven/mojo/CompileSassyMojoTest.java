@@ -51,7 +51,9 @@ public class CompileSassyMojoTest {
 
 	@After
 	public void after() {
-		;
+		for(String f: params.compiledFiles) {
+			new File(f).delete();
+		};
 	}
 
 	@Parameters

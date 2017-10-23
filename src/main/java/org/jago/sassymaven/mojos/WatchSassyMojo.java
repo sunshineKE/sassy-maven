@@ -36,7 +36,7 @@ public class WatchSassyMojo extends AbstractSassyMojo {
 				Path sourcePath = Paths.get(d.getSource());
 				sourcePath.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
 				sourceToDestDirectory.put(d.getSource().toString(), d.getDestination());
-				compiler.compile(d.getSource(), d.getDestination());		
+				compiler.compile(d.getSource(), d.getDestination());
 			}
 
 			stopped = false;
@@ -53,6 +53,7 @@ public class WatchSassyMojo extends AbstractSassyMojo {
 						String destDir = sourceToDestDirectory.get(sourceDir.toString().replace("\\", "/"));
 						compiler.compile(sourceDir.toString(), destDir);
 					}
+					
 				}
 
 				key.reset();

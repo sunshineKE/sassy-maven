@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.jago.sassymaven.compiler.util.SassFileSystemUtils;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -19,6 +20,7 @@ public class SassCompilerTest {
 	public ExpectedException thrown = ExpectedException.none();
 
 	@BeforeClass
+	@AfterClass
 	public static void cleanUpTestDirectory() {
 		File[] files = SassFileSystemUtils.findFileByExtension("src/test/resources/unittest/validFiles", "*.css");
 
@@ -32,6 +34,7 @@ public class SassCompilerTest {
 			files[i].delete();
 		}
 	}
+	
 
 	@Test
 	public void testSassCompiler() {
