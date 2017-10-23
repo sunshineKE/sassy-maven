@@ -19,7 +19,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 @Mojo(name = "watch")
 public class WatchSassyMojo extends AbstractSassyMojo {
 
-	Boolean stopped = false;
+	private Boolean stopped = false;
 	
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
