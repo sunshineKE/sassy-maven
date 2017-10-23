@@ -69,7 +69,16 @@ public class CompileSassyMojoTest {
 					"src/test/resources/integrationtest/n-to-n/output1/sassTestFile.css",
 					"src/test/resources/integrationtest/n-to-n/output2/sassTestFile.css"
 					)
-				)
+				),
+			new CompileSassyMojoTestParameter(
+					"src/test/resources/integrationtest/subdirs/pom-subdirs.xml",
+					Arrays.asList( 
+						 "src/test/resources/integrationtest/subdirs/output/sub1/sub1.css",
+						 "src/test/resources/integrationtest/subdirs/output/sub1/sub1.1/sub1.1.css",
+						 "src/test/resources/integrationtest/subdirs/output/sub1/sub1.2/sub1.2.css",
+						 "src/test/resources/integrationtest/subdirs/output/sub2/sub2.1/sub2.1.css"
+						)
+					),
 			}
 		);
 	}

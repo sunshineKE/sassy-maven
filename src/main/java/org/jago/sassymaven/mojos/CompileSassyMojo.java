@@ -1,5 +1,7 @@
 package org.jago.sassymaven.mojos;
 
+import java.util.List;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -12,7 +14,9 @@ public class CompileSassyMojo extends AbstractSassyMojo {
 
 		super.execute();
 
-		for (DirectoryMapping d : directories) {
+		List<DirectoryMapping> expandedDirs = expandDirectoryMappingSubdirs(directories);
+		
+		for (DirectoryMapping d : expandedDirs) {
 			compiler.compile(d.getSource(), d.getDestination());
 		}
 	}
