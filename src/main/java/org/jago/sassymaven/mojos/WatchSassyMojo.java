@@ -27,8 +27,13 @@ public class WatchSassyMojo extends AbstractSassyMojo {
 		HashMap<String, String> sourceToDestDirectory = new HashMap<String, String>();
 
 		super.execute();
-		// TODO Intitially run the CompileSassyMojo
+		
+		// Initially run compiler on all directories to ensure consistency
+		for (DirectoryMapping d : directories) {
+			compiler.compile(d.getSource(), d.getDestination());
+		}
 
+		// Watch and run in case of modifications
 		try {
 
 			WatchService watcher = FileSystems.getDefault().newWatchService();
