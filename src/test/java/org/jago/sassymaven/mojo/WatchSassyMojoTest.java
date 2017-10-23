@@ -100,7 +100,6 @@ public class WatchSassyMojoTest {
 				execService.execute(mojoRunner);
 				mojoStarted.await();
 				String sourceFilePath = getScssFileFromDestFile(params.getDestFilePath());
-				//TODO setting a new modification date seems not to trigger ENTRY_MODIFY
 				(new File(sourceFilePath)).setLastModified(System.currentTimeMillis());
 				Thread.sleep(1000);
 				mojoRunner.throwExceptionIfAvailable();
